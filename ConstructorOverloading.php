@@ -127,6 +127,9 @@ trait ConstructorOverloading
 	}
 	
 	/**
+	 * If the array consists entirely of values of the same type,
+	 * then return the corresponding type name for the array
+	 *
 	 * @param array $array
 	 * @return string
 	 */
