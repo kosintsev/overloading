@@ -111,8 +111,10 @@ trait ConstructorOverloading
 	}
 	
 	/**
-	 * @param array $args
-	 * @param array $types
+	 * If arguments contain a non-empty array, specify what type of value list it is.
+	 *
+	 * @param array $args  arguments passed to constructor
+	 * @param array $types type names to be qualified
 	 * @return array
 	 */
 	private function clarifyTypeArray(array $args, array $types): array
@@ -162,8 +164,10 @@ trait ConstructorOverloading
 	}
 	
 	/**
-	 * @param array $args
-	 * @param array $types
+	 * Clarify which interfaces are implemented
+	 *
+	 * @param array $args  arguments passed to constructor
+	 * @param array $types type names to be qualified
 	 * @return array
 	 */
 	private function clarifyTypeObject(array $args, array $types): array
