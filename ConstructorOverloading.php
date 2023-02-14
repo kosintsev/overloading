@@ -44,14 +44,19 @@ trait ConstructorOverloading
 	protected function overload(array $args): void
 	{
 		$types = array_map(fn($i) => ucfirst(gettype($i)), $args);
-		$types = $this->clarifyTypeArray($args, $types);
-		$types = $this->clarifyTypeObject($args, $types);
-		$methods = $this->getMethodNames($types);
 		$prefix = 'construct';
-		foreach ($methods as $nameMethod) {
-			if (method_exists($this, $prefix . $nameMethod)) {
-				call_user_func_array([$this, $prefix . $nameMethod], $args);
-				break;
+		$nameMethod = $prefix . implode('', $types);
+		if (method_exists($this, $nameMethod)) {
+			call_user_func_array([$this, $nameMethod], $args);
+		} else {
+			$types = $this->clarifyTypeArray($args, $types);
+			$types = $this->clarifyTypeObject($args, $types);
+			$methods = $this->getMethodNames($types);
+			foreach ($methods as $nameMethod) {
+				if (method_exists($this, $prefix . $nameMethod)) {
+					call_user_func_array([$this, $prefix . $nameMethod], $args);
+					break;
+				}
 			}
 		}
 	}
