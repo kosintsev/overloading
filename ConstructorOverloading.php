@@ -1,16 +1,15 @@
 <?php
 
+namespace App;
 /**
  ***Use in your class how example:**
  * @internal <pre>
 final class FRAntispamHiddenField implements IFormRequest
 {
 >	use ConstructorOverloading;
-
 >	private array $fieldNames;
 >	private ISpamRobotAPI $api;
 >	private IFormRequest $request;
-
 >	public function __construct(IFormRequest $obj)
 >	{
 >	  $this->fieldNames = [];
@@ -18,12 +17,10 @@ final class FRAntispamHiddenField implements IFormRequest
 >	  $this->request = $obj;
 >	  self::overload(func_get_args());
 >	}
-
 >	protected function constructIFormRequestString(IFormRequest $obj, string $field)
 >	{
 >	  $this->fieldNames = [$field];
 >	}
-
 >	protected function constructIFormRequestSArrayISpamRobotAPI(IFormRequest $obj, array $fields, ISpamRobotAPI $robotApi)
 >	{
 >	  $this->fieldNames = $fields;
@@ -182,9 +179,11 @@ trait ConstructorOverloading
 			foreach ($objects as $k => $obj) {
 				$interfaceNames = class_implements($obj,false);
 				if ($interfaceNames !== false && count($interfaceNames) > 0) {
-					$interfaceNames = array_map(fn($i) => ucfirst($i), array_values($interfaceNames));
+					$interfaceNames = array_map(fn($i) => ucfirst(
+						array_slice(explode("\\", $i), -1, 1)[0]// todo: refactoring, namespaces prepare properly
+					), array_values($interfaceNames));
 				} else {
-					$interfaceNames[] = 'Object';
+					$interfaceNames = array_slice(explode("\\", get_class($obj)), -1, 1)[0];
 				}
 				$types[$k] = $interfaceNames;
 			}
